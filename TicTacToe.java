@@ -32,15 +32,6 @@ public class TicTacToe extends JFrame {
    private final int BUTTON_WIDTH = 150; // button width
    private final int BUTTON_HEIGHT = 100; // button height
    private String X = "X";
-   private Boolean checked1 = false;
-   private Boolean checked2 = false;
-   private Boolean checked3 = false;
-   private Boolean checked4 = false;
-   private Boolean checked5 = false;
-   private Boolean checked6 = false;
-   private Boolean checked7 = false;
-   private Boolean checked8 = false;
-   private Boolean checked9 = false;
    
    public TicTacToe()
    {
@@ -126,97 +117,31 @@ public class TicTacToe extends JFrame {
    
    private class ButtonListener implements ActionListener
    {
-      @Override
       public void actionPerformed(ActionEvent e)
       {
           if(e.getSource() == button1)
-          {
              button1.setText(X);
-             checked1 = true;
-             pressed();
-          }
           else if(e.getSource() == button2)
-          {
               button2.setText(X);
-              checked2 = true;
-              pressed();
-          }
           else if(e.getSource() == button3)
-          {
               button3.setText(X);
-              checked3 = true;
-              pressed();   
-          }
           else if(e.getSource() == button4)
-          {
              button4.setText(X);
-             checked4 = true;
-             pressed();  
-          }
           else if(e.getSource() == button5)
-          {
               button5.setText(X);
-              checked5 = true;
-              pressed();   
-          }
           else if(e.getSource() == button6)
-          {
               button6.setText(X);
-              checked6 = true;
-              pressed();
-          }
           else if(e.getSource() == button7)
-          {
              button7.setText(X);
-             checked7 = true;
-             pressed();
-          }
           else if(e.getSource() == button8)
-          {
               button8.setText(X);
-              checked8 = true;
-              pressed();
-          }
           else if(e.getSource() == button9)
-          {
               button9.setText(X);
-              checked9 = true;
-              pressed();
-          }
       }
-   }
-   
-   public void pressed()
-   {
-       if (checked1 && checked5 && checked9){ // diagnol from loc 1
-           System.out.println("you won");
-       }
-       else if (checked3 && checked5 && checked7){ // diagnol from loc 3
-           System.out.println("you won");
-       }
-       else if (checked1 && checked4 && checked7){ // vertical from loc 1
-           System.out.println("you won");
-       }
-       else if (checked2 && checked5 && checked8){ // vertical from loc 2
-           System.out.println("you won");
-       }
-       else if (checked3 && checked6 && checked9){ // vertical from loc 3
-           System.out.println("you won");
-       }
-       else if(checked1 && checked2 && checked3) { // horizontal from 1
-           System.out.println("you won");
-       }
-       else if(checked4 && checked5 && checked6) { // horizontal from 2
-           System.out.println("you won");
-       }
-       else if(checked7 && checked8 && checked9) { // horizontal from 3
-           System.out.println("you won");
-       }
    }
     
     public static void main(String[] args) {
         new TicTacToe();
-        TicTacToe pressed = new TicTacToe();
     }
     
 }
