@@ -52,12 +52,8 @@ public class TicTacToe extends JFrame {
    private JLabel name2;
    private final int WINDOW_WIDTH = 500; // Window width
    private final int WINDOW_HEIGHT = 500; // Window height
-   private final int BUTTON_WIDTH = 150; // button width
-   private final int BUTTON_HEIGHT = 100; // button height
-   private String X = "X";
-   private String O = "O";
-   private String player1Name; // used for specifying turns
-   private String player2Name; // used for specifying turns
+   private String player1Name; // player 1's name
+   private String player2Name; // player 2's name
    private Boolean checked1 = false;
    private Boolean checked2 = false;
    private Boolean checked3 = false;
@@ -110,8 +106,8 @@ public class TicTacToe extends JFrame {
       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       
       // Create the three buttons.
-      player1 = new JTextField(8);
-      player2 = new JTextField(8);
+      player1 = new JTextField("Player 1", 8);
+      player2 = new JTextField("Player 2", 8);
       winsLabel1 = new JLabel("Wins:");
       lossesLabel1 = new JLabel("Losses:");
       winsLabel2 = new JLabel("Wins:");
@@ -128,12 +124,6 @@ public class TicTacToe extends JFrame {
       
       buildButtons();
       buildMiddlePanel();
-     // player1.addActionListener(new Player1Listener());
-      //player2.addActionListener(new Player2Listener());
-      
-      // Create a panel and add the buttons to it.
-      
-      
       buildPlayerPanel();
       buildBottomPanel();
       
@@ -151,6 +141,7 @@ public class TicTacToe extends JFrame {
    private void buildMiddlePanel()
    {
       panel = new JPanel();
+      panel.setLayout(new GridLayout(3, 3));
       panel.add(button1);
       panel.add(button2);
       panel.add(button3);
@@ -159,17 +150,7 @@ public class TicTacToe extends JFrame {
       panel.add(button6);
       panel.add(button7);
       panel.add(button8);
-      panel.add(button9);
-      
-      button1.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
-      button2.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
-      button3.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
-      button4.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
-      button5.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
-      button6.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
-      button7.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
-      button8.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
-      button9.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT)); 
+      panel.add(button9);     
    }
    
    private void buildButtons(){
@@ -199,6 +180,7 @@ public class TicTacToe extends JFrame {
    private void buildBottomPanel(){
        bottomPanel = new JPanel();
        bottomPanel.setLayout(new BorderLayout());
+       statusLabel.setBorder(BorderFactory.createEtchedBorder(1));
        
        buildButtonPanel();
        bottomPanel.add(buttonPanel);
@@ -236,19 +218,22 @@ public class TicTacToe extends JFrame {
        player2Wins.setText("" + player1WinCount);
        player1Losses.setText("" + player2LossCount);
        
+       player1.setText("Player 1");
+       player2.setText("Player 2");
+       
        inGame = false;
    }
    
    private void resetBoard(){
-       button1.setText("");
-       button2.setText("");
-       button3.setText("");
-       button4.setText("");
-       button5.setText("");
-       button6.setText("");
-       button7.setText("");
-       button8.setText("");
-       button9.setText("");
+       button1.setIcon(null);
+       button2.setIcon(null);
+       button3.setIcon(null);
+       button4.setIcon(null);
+       button5.setIcon(null);
+       button6.setIcon(null);
+       button7.setIcon(null);
+       button8.setIcon(null);
+       button9.setIcon(null);
        
        button1Player1 = false;
        button2Player1 = false;
@@ -297,7 +282,7 @@ public class TicTacToe extends JFrame {
    private void buildPlayerOne()
    {
         player1Panel = new JPanel();
-        player1Panel.setBorder(BorderFactory.createTitledBorder("Player 1 (X)"));
+        player1Panel.setBorder(BorderFactory.createTitledBorder("Player 1 (Puppies)"));
         player1Panel.setLayout(new GridLayout(3, 2));
         player1Panel.add(name);
         player1Panel.add(player1);
@@ -310,7 +295,7 @@ public class TicTacToe extends JFrame {
    private void buildPlayerTwo()
    {
         player2Panel = new JPanel();
-        player2Panel.setBorder(BorderFactory.createTitledBorder("Player 2 (O)"));
+        player2Panel.setBorder(BorderFactory.createTitledBorder("Player 2 (Kittens)"));
         player2Panel.setLayout(new GridLayout(3, 2));
         player2Panel.add(name2);
         player2Panel.add(player2);
@@ -341,7 +326,7 @@ public class TicTacToe extends JFrame {
                       statusLabel.setText(player1Name + "'s turn");
                   }   break;
               case "Reset":
-                  int confirm = JOptionPane.showConfirmDialog(null, "This will end the game and set the win/loss stats to 0. Are you sure?", "WARNING", JOptionPane.YES_NO_OPTION);
+                  int confirm = JOptionPane.showConfirmDialog(null, "This will end the game and set the win/loss stats to 0. Are you sure?", "ARE YOU SURE?", JOptionPane.YES_NO_OPTION);
                   if(confirm == JOptionPane.YES_OPTION){
                       resetGame();
                   }   break;
@@ -350,12 +335,12 @@ public class TicTacToe extends JFrame {
               default:
                   if(player1Turn)
                   {
-                      turn(e, X, player1Turn);
+                      turn(e, player1Turn);
                       
                   }
                   else
                   {
-                      turn(e, O, player1Turn);
+                      turn(e, player1Turn);
                       
                   }     break;
           }
@@ -449,18 +434,17 @@ public class TicTacToe extends JFrame {
        }
    }
    
-   public void turn(ActionEvent e, String X, Boolean turn){
+   public void turn(ActionEvent e, Boolean turn){
         if(inGame){ 
-            ImageIcon puppyImage;
-            puppyImage = new ImageIcon("puppy.jpg");
-            ImageIcon kittensImage = new ImageIcon("kittens.jpg");
+            ImageIcon puppyIcon = new ImageIcon("puppy.jpg");
+            ImageIcon kittensIcon = new ImageIcon("kitten.jpg");
+            Image puppyImage = puppyIcon.getImage();
+            Image kittensImage = kittensIcon.getImage();
+            Image scaledPuppies = puppyImage.getScaledInstance((int) (button1.getSize()).getWidth(), (int) (button1.getSize()).getHeight(), java.awt.Image.SCALE_SMOOTH);
+            Image scaledKittens = kittensImage.getScaledInstance((int) (button1.getSize()).getWidth(), (int) (button1.getSize()).getHeight(), java.awt.Image.SCALE_SMOOTH);
+            puppyIcon = new ImageIcon(scaledPuppies);
+            kittensIcon = new ImageIcon(scaledKittens);
             
-            if(turn){
-                statusLabel.setText(player2Name + "'s turn");
-            }
-            else{
-                statusLabel.setText(player1Name + "'s turn");
-            }
             
             if(e.getSource() == button1)
             {
@@ -471,17 +455,15 @@ public class TicTacToe extends JFrame {
                     checked1 = true;
                     
                     if(turn){
-                        button1.setIcon(puppyImage);
-                        pack();
+                        button1.setIcon(puppyIcon);
                         button1Player1 = true;
                         player1Turn = false;
-                        JOptionPane.showMessageDialog(null, "Button pressed " + checked1);
+                        statusLabel.setText(player2Name + "'s turn");
                     } else {
-                        button1.setIcon(kittensImage);
-                        pack();
+                        button1.setIcon(kittensIcon);
                         button1Player2 = true;
                         player1Turn = true; 
-                        JOptionPane.showMessageDialog(null, "Button pressed " + checked1);
+                        statusLabel.setText(player1Name + "'s turn");
                         
                     }
                     
@@ -491,19 +473,19 @@ public class TicTacToe extends JFrame {
             else if(e.getSource() == button2)
             {
                 if(!checked2){
-                    
-                    button2.setText(X);
                     checked2 = true;
                     
                     if(turn){
+                        button2.setIcon(puppyIcon);
                         button2Player1 = true;
                         player1Turn = false;
+                        statusLabel.setText(player2Name + "'s turn");
                     } else {
+                        button2.setIcon(kittensIcon);
                         button2Player2 = true;
                         player1Turn = true; 
-                        
+                        statusLabel.setText(player1Name + "'s turn");
                     }
-                    JOptionPane.showMessageDialog(null, "Button pressed " + checked2);
                     pressed();
                 }
             }
@@ -511,32 +493,37 @@ public class TicTacToe extends JFrame {
             {
                 
                 if(!checked3){
-                    button3.setText(X);
                     checked3 = true;
                      
                     if(turn){
+                        button3.setIcon(puppyIcon);
                         button3Player1 = true;
                         player1Turn = false;
+                        statusLabel.setText(player2Name + "'s turn");
                     } else {
+                        button3.setIcon(kittensIcon);
                         button3Player2 = true;
                         player1Turn = true; 
+                        statusLabel.setText(player1Name + "'s turn");
                     }
-                    JOptionPane.showMessageDialog(null, "Button pressed " + checked3);
                     pressed();
                 }
             }
             else if(e.getSource() == button4)
             {
                 if(!checked4){
-                    button4.setText(X);
                     checked4 = true;
                     
                     if(turn){
+                        button4.setIcon(puppyIcon);
                         button4Player1 = true;
                         player1Turn = false;
+                        statusLabel.setText(player2Name + "'s turn");
                     } else {
+                        button4.setIcon(kittensIcon);
                         button4Player2 = true;
                         player1Turn = true; 
+                        statusLabel.setText(player1Name + "'s turn");
                     }
                     pressed();
                 }
@@ -544,15 +531,18 @@ public class TicTacToe extends JFrame {
             else if(e.getSource() == button5)
             {
                 if(!checked5){
-                    button5.setText(X);
                     checked5 = true;
   
                     if(turn){
+                        button5.setIcon(puppyIcon);
                         button5Player1 = true;
                         player1Turn = false;
+                        statusLabel.setText(player2Name + "'s turn");
                     } else {
+                        button5.setIcon(kittensIcon);
                         button5Player2 = true;
                         player1Turn = true; 
+                        statusLabel.setText(player1Name + "'s turn");
                     }
                     pressed();
                 }
@@ -560,32 +550,37 @@ public class TicTacToe extends JFrame {
             else if(e.getSource() == button6)
             {
                 if(!checked6){
-                    button6.setText(X);
                     checked6 = true;
 
                     if(turn){
+                        button6.setIcon(puppyIcon);
                         button6Player1 = true;
                         player1Turn = false;
+                        statusLabel.setText(player2Name + "'s turn");
                     } else {
+                        button6.setIcon(kittensIcon);
                         button6Player2 = true;
-                        player1Turn = true; 
+                        player1Turn = true;
+                        statusLabel.setText(player1Name + "'s turn");
                     }
+                    
                     pressed();
                 }
             }
             else if(e.getSource() == button7)
             {
                 if(!checked7){
-                    button7.setText(X);
                     checked7 = true;
-                    
-
                     if(turn){
+                        button7.setIcon(puppyIcon);
                         button7Player1 = true;
                         player1Turn = false;
+                        statusLabel.setText(player2Name + "'s turn");
                     } else {
+                        button7.setIcon(kittensIcon);
                         button7Player2 = true;
-                        player1Turn = true; 
+                        player1Turn = true;
+                        statusLabel.setText(player1Name + "'s turn");
                     }
                     pressed();
                 }
@@ -593,16 +588,19 @@ public class TicTacToe extends JFrame {
             else if(e.getSource() == button8)
             {
                 if(!checked8){
-                    button8.setText(X);
                     checked8 = true;
                     
 
                     if(turn){
+                        button8.setIcon(puppyIcon);
                         button8Player1 = true;
                         player1Turn = false;
+                        statusLabel.setText(player2Name + "'s turn");
                     } else {
+                        button8.setIcon(kittensIcon);
                         button8Player2 = true;
-                        player1Turn = true; 
+                        player1Turn = true;
+                        statusLabel.setText(player1Name + "'s turn");
                     }
                     pressed();
                 }
@@ -610,15 +608,18 @@ public class TicTacToe extends JFrame {
             else if(e.getSource() == button9)
             {
                 if(!checked9){
-                    button9.setText(X);
                     checked9 = true;
                    
                     if(turn){
+                        button9.setIcon(puppyIcon);
                         button9Player1 = true;
                         player1Turn = false;
+                        statusLabel.setText(player2Name + "'s turn");
                     } else {
+                        button9.setIcon(kittensIcon);
                         button9Player2 = true;
                         player1Turn = true; 
+                        statusLabel.setText(player1Name + "'s turn");
                     }
                     pressed();
                 }
