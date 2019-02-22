@@ -20,6 +20,9 @@ public class TicTacToe extends JFrame {
    private JButton button7;    // Button 7
    private JButton button8;    // Button 8
    private JButton button9;    // Button 9
+   private JButton newGameButton;
+   private JButton resetButton;
+   private JButton exitButton;
    private JTextField player1;    // player 1 name
    private JTextField player2;    // player 1 name
    private JPanel panel;       // A panel to hold button components
@@ -27,12 +30,15 @@ public class TicTacToe extends JFrame {
    private JPanel player1Panel; // panel to hold player info
    private JPanel player2Panel; // panel to hold player 2 info
    private JPanel bottomPanel;
+   private JPanel buttonPanel;
    
+   private JLabel statusLabel;
    private JLabel player1Losses;
    private JLabel player1Wins;
    private int player1WinCount = 0;
    private int player1LossCount = 0;
    
+
    private JLabel winsLabel1;
    private JLabel lossesLabel1;
    private JLabel winsLabel2;
@@ -82,7 +88,7 @@ public class TicTacToe extends JFrame {
    private Boolean button9Player2 = false;
    
    private Boolean gameOver = false;
-   
+   private Boolean inGame = false;
    
    
    private Boolean player1Turn = true; // this is used to determine whose turn it is based on button pushes
@@ -117,7 +123,7 @@ public class TicTacToe extends JFrame {
       player2Losses = new JLabel("0");
       name = new JLabel("Name: ");
       name2 = new JLabel("Name: ");
-
+      statusLabel = new JLabel("Press 'New Game' when ready");
       // Register an event listener with all 9 buttons.
       button1 = new JButton();
       button2 = new JButton();
@@ -139,8 +145,8 @@ public class TicTacToe extends JFrame {
       button8.addActionListener(new ButtonListener());
       button9.addActionListener(new ButtonListener());
       
-      player1.addActionListener(new Player1Listener());
-      player2.addActionListener(new Player2Listener());
+     // player1.addActionListener(new Player1Listener());
+      //player2.addActionListener(new Player2Listener());
       
       // Create a panel and add the buttons to it.
       panel = new JPanel();
@@ -165,19 +171,43 @@ public class TicTacToe extends JFrame {
       button9.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
       
       buildPlayerPanel();
-
+      buildBottomPanel();
       
       
       // Add the info to the window
       add(panel, BorderLayout.CENTER);
       add(playerPanel, BorderLayout.NORTH); // adds the two player panels
-
+      add(bottomPanel, BorderLayout.SOUTH);
+      
+      
       // Display the window.
       setVisible(true);   
    }
    
+   
    private void buildBottomPanel(){
        bottomPanel = new JPanel();
+       bottomPanel.setLayout(new BorderLayout());
+       
+       buildButtonPanel();
+       bottomPanel.add(buttonPanel);
+       bottomPanel.add(statusLabel, BorderLayout.SOUTH);
+       
+   }
+   
+   private void buildButtonPanel(){
+       buttonPanel = new JPanel();
+       
+       newGameButton = new JButton("New Game");
+       resetButton = new JButton("Reset");
+       exitButton = new JButton("Exit");
+       newGameButton.addActionListener(new ButtonListener());
+       resetButton.addActionListener(new ButtonListener());
+       exitButton.addActionListener(new ButtonListener());
+       
+       buttonPanel.add(newGameButton);
+       buttonPanel.add(resetButton);
+       buttonPanel.add(exitButton);
    }
    
    private void resetGame(){
@@ -221,6 +251,11 @@ public class TicTacToe extends JFrame {
        checked9 = false;
        
        gameOver = false;
+       inGame = false;
+       
+       player1Turn = true;
+       
+       statusLabel.setText("Press 'New Game' when ready");
    }
    
    private void buildPlayerPanel()
@@ -260,21 +295,53 @@ public class TicTacToe extends JFrame {
    
    }
    
+   
    private class ButtonListener implements ActionListener
    {
       public void actionPerformed(ActionEvent e)
       {
-          if(player1Turn)
+          String actionCommand = e.getActionCommand();
+          if(actionCommand.equals("New Game"))
           {
-              turn(e, X, true);  
+              player1Name = player1.getText();
+              player2Name = player2.getText();
+              
+              
+              if(player1Name.equals("") || player2Name.equals("")){
+                    JOptionPane.showMessageDialog(null, "Both names must be entered to start the game!", "ERROR", JOptionPane.ERROR_MESSAGE);
+              }
+              else{
+                inGame = true;
+                statusLabel.setText(player1Name + "'s turn"); 
+              }
           }
-          else
-          {
-              turn(e, O, false);
+          else if(actionCommand.equals("Reset")){
+              int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to reset the game?", "WARNING", JOptionPane.YES_NO_OPTION);
+              if(confirm == JOptionPane.YES_OPTION){
+                  resetGame();
+              }
+              
+              
+          }
+          else if(actionCommand.equals("Exit")){
+              System.exit(0);
+          }
+          else{
+            if(player1Turn)
+            {
+                turn(e, X, true);
+                statusLabel.setText(player2Name + "'s turn");
+            }
+            else
+            {
+                turn(e, O, false);
+                statusLabel.setText(player1Name + "'s turn");
+            }
           }
       }
    }
    
+   /*
    private class Player1Listener implements ActionListener
    {
       public void actionPerformed(ActionEvent e)
@@ -296,6 +363,7 @@ public class TicTacToe extends JFrame {
               player2Name = player2.getText();
       }
    }
+*/
    
    public void pressed()
    {
@@ -423,7 +491,7 @@ public class TicTacToe extends JFrame {
    }
    
    public void turn(ActionEvent e, String X, Boolean turn){
-        if(!gameOver){    
+        if(!gameOver && inGame){    
             if(e.getSource() == button1)
             {
                 if(!checked1){
