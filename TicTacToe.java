@@ -87,7 +87,6 @@ public class TicTacToe extends JFrame {
    private Boolean button8Player2 = false;
    private Boolean button9Player2 = false;
    
-   private Boolean gameOver = false;
    private Boolean inGame = false;
    
    
@@ -96,7 +95,7 @@ public class TicTacToe extends JFrame {
    public TicTacToe()
    {
       // Set the title bar text.
-      setTitle("Tic Tac Toe");
+      setTitle("Tic-Tac-Toe");
 
       // Set the fonr
       //( ! ) NOT WORKING
@@ -123,32 +122,34 @@ public class TicTacToe extends JFrame {
       player2Losses = new JLabel("0");
       name = new JLabel("Name: ");
       name2 = new JLabel("Name: ");
-      statusLabel = new JLabel("Press 'New Game' when ready");
+      statusLabel = new JLabel("Welcome to Tic-Tac-Toe!");
       // Register an event listener with all 9 buttons.
-      button1 = new JButton();
-      button2 = new JButton();
-      button3 = new JButton();
-      button4 = new JButton();
-      button5 = new JButton();
-      button6 = new JButton();
-      button7 = new JButton();
-      button8 = new JButton();
-      button9 = new JButton(); 
-   
-      button1.addActionListener(new ButtonListener());
-      button2.addActionListener(new ButtonListener());
-      button3.addActionListener(new ButtonListener());
-      button4.addActionListener(new ButtonListener());
-      button5.addActionListener(new ButtonListener());
-      button6.addActionListener(new ButtonListener());
-      button7.addActionListener(new ButtonListener());
-      button8.addActionListener(new ButtonListener());
-      button9.addActionListener(new ButtonListener());
       
+      
+      buildButtons();
+      buildMiddlePanel();
      // player1.addActionListener(new Player1Listener());
       //player2.addActionListener(new Player2Listener());
       
       // Create a panel and add the buttons to it.
+      
+      
+      buildPlayerPanel();
+      buildBottomPanel();
+      
+      
+      // Add the info to the window
+      add(panel, BorderLayout.CENTER);
+      add(playerPanel, BorderLayout.NORTH); // adds the two player panels
+      add(bottomPanel, BorderLayout.SOUTH);
+      
+      
+      // Display the window.
+      setVisible(true);   
+   }
+   
+   private void buildMiddlePanel()
+   {
       panel = new JPanel();
       panel.add(button1);
       panel.add(button2);
@@ -168,20 +169,30 @@ public class TicTacToe extends JFrame {
       button6.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
       button7.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
       button8.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
-      button9.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
-      
-      buildPlayerPanel();
-      buildBottomPanel();
-      
-      
-      // Add the info to the window
-      add(panel, BorderLayout.CENTER);
-      add(playerPanel, BorderLayout.NORTH); // adds the two player panels
-      add(bottomPanel, BorderLayout.SOUTH);
-      
-      
-      // Display the window.
-      setVisible(true);   
+      button9.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT)); 
+   }
+   
+   private void buildButtons(){
+      button1 = new JButton();
+      button2 = new JButton();
+      button3 = new JButton();
+      button4 = new JButton();
+      button5 = new JButton();
+      button6 = new JButton();
+      button7 = new JButton();
+      button8 = new JButton();
+      button9 = new JButton(); 
+   
+      button1.addActionListener(new ButtonListener());
+      button2.addActionListener(new ButtonListener());
+      button3.addActionListener(new ButtonListener());
+      button4.addActionListener(new ButtonListener());
+      button5.addActionListener(new ButtonListener());
+      button6.addActionListener(new ButtonListener());
+      button7.addActionListener(new ButtonListener());
+      button8.addActionListener(new ButtonListener());
+      button9.addActionListener(new ButtonListener());
+       
    }
    
    
@@ -211,6 +222,24 @@ public class TicTacToe extends JFrame {
    }
    
    private void resetGame(){
+       resetBoard();
+       
+       statusLabel.setText("Welcome to Tic-Tac-Toe!");
+       player1.setEditable(true);
+       player2.setEditable(true);
+       player1WinCount = 0;
+       player2LossCount = 0;
+       player1Wins.setText("" + player1WinCount);
+       player2Losses.setText("" + player2LossCount);
+       player2WinCount = 0;
+       player1LossCount = 0;
+       player2Wins.setText("" + player1WinCount);
+       player1Losses.setText("" + player2LossCount);
+       
+       inGame = false;
+   }
+   
+   private void resetBoard(){
        button1.setText("");
        button2.setText("");
        button3.setText("");
@@ -250,12 +279,9 @@ public class TicTacToe extends JFrame {
        checked8 = false;
        checked9 = false;
        
-       gameOver = false;
-       inGame = false;
-       
        player1Turn = true;
        
-       statusLabel.setText("Press 'New Game' when ready");
+       
    }
    
    private void buildPlayerPanel()
@@ -301,216 +327,171 @@ public class TicTacToe extends JFrame {
       public void actionPerformed(ActionEvent e)
       {
           String actionCommand = e.getActionCommand();
-          if(actionCommand.equals("New Game"))
-          {
-              player1Name = player1.getText();
-              player2Name = player2.getText();
-              
-              
-              if(player1Name.equals("") || player2Name.equals("")){
-                    JOptionPane.showMessageDialog(null, "Both names must be entered to start the game!", "ERROR", JOptionPane.ERROR_MESSAGE);
-              }
-              else{
-                inGame = true;
-                statusLabel.setText(player1Name + "'s turn"); 
-              }
-          }
-          else if(actionCommand.equals("Reset")){
-              int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to reset the game?", "WARNING", JOptionPane.YES_NO_OPTION);
-              if(confirm == JOptionPane.YES_OPTION){
-                  resetGame();
-              }
-              
-              
-          }
-          else if(actionCommand.equals("Exit")){
-              System.exit(0);
-          }
-          else{
-            if(player1Turn)
-            {
-                turn(e, X, true);
-                statusLabel.setText(player2Name + "'s turn");
-            }
-            else
-            {
-                turn(e, O, false);
-                statusLabel.setText(player1Name + "'s turn");
-            }
+          switch (actionCommand) {
+              case "New Game":
+                  player1Name = player1.getText();
+                  player2Name = player2.getText();
+                  if(player1Name.equals("") || player2Name.equals("")){
+                      JOptionPane.showMessageDialog(null, "Both names must be entered to start the game!", "ERROR", JOptionPane.ERROR_MESSAGE);
+                  }
+                  else{
+                      player1.setEditable(false);
+                      player2.setEditable(false);
+                      inGame = true;
+                      statusLabel.setText(player1Name + "'s turn");
+                  }   break;
+              case "Reset":
+                  int confirm = JOptionPane.showConfirmDialog(null, "This will end the game and set the win/loss stats to 0. Are you sure?", "WARNING", JOptionPane.YES_NO_OPTION);
+                  if(confirm == JOptionPane.YES_OPTION){
+                      resetGame();
+                  }   break;
+              case "Exit":
+                  System.exit(0);
+              default:
+                  if(player1Turn)
+                  {
+                      turn(e, X, player1Turn);
+                      
+                  }
+                  else
+                  {
+                      turn(e, O, player1Turn);
+                      
+                  }     break;
           }
       }
    }
    
-   /*
-   private class Player1Listener implements ActionListener
-   {
-      public void actionPerformed(ActionEvent e)
-      {
-          if(e.getSource() == player1)
-              player1Name = player1.getText();
-          else if(e.getSource() == player2)
-              player2Name = player2.getText();
-      }
+   private void winner(int player){
+       if(player == 1){
+          player1WinCount++;
+          player2LossCount++;
+          player1Wins.setText("" + player1WinCount);
+          player2Losses.setText("" + player2LossCount);
+          JOptionPane.showMessageDialog(null, player1Name + " has gotten 3 in a row!");
+          resetBoard();
+          
+       }
+       else if(player == 2){
+           player2WinCount++;
+           player1LossCount++;
+           player2Wins.setText("" + player2WinCount);
+           player1Losses.setText("" + player1LossCount); 
+           JOptionPane.showMessageDialog(null, player2Name + " has gotten 3 in a row!");
+           resetBoard();
+           
+       }
    }
-   
-   private class Player2Listener implements ActionListener
-   {
-      public void actionPerformed(ActionEvent e)
-      {
-          if(e.getSource() == player1)
-              player1Name = player1.getText();
-          else if(e.getSource() == player2)
-              player2Name = player2.getText();
-      }
-   }
-*/
    
    public void pressed()
    {
        if (checked1 && checked5 && checked9){ // diagnol from loc 1
            if(button1Player1 && button5Player1 && button9Player1){
-                player1WinCount++;
-                player2LossCount++;
-                player1Wins.setText("" + player1WinCount);
-                player2Losses.setText("" + player2LossCount);
-                gameOver = true;
+                winner(1);
            } else if (button1Player2 && button5Player2 && button9Player2){
-                player2WinCount++;
-                player1LossCount++;
-                player2Wins.setText("" + player2WinCount);
-                player1Losses.setText("" + player1LossCount); 
-                gameOver = true;
-           }
-               
+                winner(2);
+           }     
        }
-       else if (checked3 && checked5 && checked7){ // diagnol from loc 3
+       if (checked3 && checked5 && checked7){ // diagnol from loc 3
            if(button3Player1 && button5Player1 && button7Player1){
-                player1WinCount++;
-                player2LossCount++;
-                player1Wins.setText("" + player1WinCount);
-                player2Losses.setText("" + player2LossCount);
-                gameOver = true;
+                winner(1);
            } else if (button3Player2 && button5Player2 && button7Player2){
-                player2WinCount++;
-                player1LossCount++;
-                player2Wins.setText("" + player2WinCount);
-                player1Losses.setText("" + player1LossCount); 
-                gameOver = true;
+                winner(2);
            }
        }
-       else if (checked1 && checked4 && checked7){ // vertical from loc 1
+       if (checked1 && checked4 && checked7){ // vertical from loc 1
            if(button1Player1 && button4Player1 && button7Player1){
-                player1WinCount++;
-                player2LossCount++;
-                player1Wins.setText("" + player1WinCount);
-                player2Losses.setText("" + player2LossCount);
-                gameOver = true;
+                winner(1);
            } else if (button1Player2 && button4Player2 && button7Player2){
-                player2WinCount++;
-                player1LossCount++;
-                player2Wins.setText("" + player2WinCount);
-                player1Losses.setText("" + player1LossCount); 
-                gameOver = true;
+                winner(2);
            }
        }
-       else if (checked2 && checked5 && checked8){ // vertical from loc 2
-            if(button1Player2 && button5Player1 && button8Player1){
-                player1WinCount++;
-                player2LossCount++;
-                player1Wins.setText("" + player1WinCount);
-                player2Losses.setText("" + player2LossCount);
-                gameOver = true;
+       if (checked2 && checked5 && checked8){ // vertical from loc 2
+            if(button2Player1 && button5Player1 && button8Player1){
+                winner(1);
            } else if (button2Player2 && button5Player2 && button8Player2){
-                player2WinCount++;
-                player1LossCount++;
-                player2Wins.setText("" + player2WinCount);
-                player1Losses.setText("" + player1LossCount); 
-                gameOver = true;
+                winner(2);
            }
        }
-       else if (checked3 && checked6 && checked9){ // vertical from loc 3
+       if (checked3 && checked6 && checked9){ // vertical from loc 3
            if(button3Player1 && button6Player1 && button9Player1){
-                player1WinCount++;
-                player2LossCount++;
-                player1Wins.setText("" + player1WinCount);
-                player2Losses.setText("" + player2LossCount);
-                gameOver = true;
+                winner(1);
            } else if (button3Player2 && button6Player2 && button9Player2){
-                player2WinCount++;
-                player1LossCount++;
-                player2Wins.setText("" + player2WinCount);
-                player1Losses.setText("" + player1LossCount); 
-                gameOver = true;
+                winner(2);
            }
        }
-       else if(checked1 && checked2 && checked3) { // horizontal from 1
+       if(checked1 && checked2 && checked3) { // horizontal from 1
+           //JOptionPane.showMessageDialog(null,"YEET");
            if(button1Player1 && button2Player1 && button3Player1){
-                player1WinCount++;
-                player2LossCount++;
-                player1Wins.setText("" + player1WinCount);
-                player2Losses.setText("" + player2LossCount);
-                gameOver = true;
-           } else if (button1Player2 && button2Player2 && button3Player2){
-                player2WinCount++;
-                player1LossCount++;
-                player2Wins.setText("" + player2WinCount);
-                player1Losses.setText("" + player1LossCount); 
-                gameOver = true;
+                winner(1);      
+           } else if(button1Player2 && button2Player2 && button3Player2){
+                winner(2);
            }
        }
-       else if(checked4 && checked5 && checked6) { // horizontal from 2
+        if(checked4 && checked5 && checked6) { // horizontal from 2
            if(button4Player1 && button5Player1 && button6Player1){
-                player1WinCount++;
-                player2LossCount++;
-                player1Wins.setText("" + player1WinCount);
-                player2Losses.setText("" + player2LossCount);
-                gameOver = true;
+                winner(1);
            } else if (button4Player2 && button5Player2 && button6Player2){
-                player2WinCount++;
-                player1LossCount++;
-                player2Wins.setText("" + player2WinCount);
-                player1Losses.setText("" + player1LossCount); 
-                gameOver = true;
+                winner(2);
            }
        }
-       else if(checked7 && checked8 && checked9) { // horizontal from 3
+       if(checked7 && checked8 && checked9) { // horizontal from 3
            if(button7Player1 && button8Player1 && button9Player1){
-                player1WinCount++;
-                player2LossCount++;
-                player1Wins.setText("" + player1WinCount);
-                player2Losses.setText("" + player2LossCount);
-                gameOver = true;
+                winner(1);
            } else if (button7Player2 && button8Player2 && button9Player2){
-                player2WinCount++;
-                player1LossCount++;
-                player2Wins.setText("" + player2WinCount);
-                player1Losses.setText("" + player1LossCount); 
-                gameOver = true;
+                winner(2);
            }
+       }
+       if(checked1 && checked2 && checked3 && checked4 && checked5 && checked6 && checked7 && checked8 && checked9){
+           JOptionPane.showMessageDialog(null, "The game has ended in a stalemate!");
+           resetBoard();
+           
        }
    }
    
    public void turn(ActionEvent e, String X, Boolean turn){
-        if(!gameOver && inGame){    
+        if(inGame){ 
+            ImageIcon puppyImage;
+            puppyImage = new ImageIcon("puppy.jpg");
+            ImageIcon kittensImage = new ImageIcon("kittens.jpg");
+            
+            if(turn){
+                statusLabel.setText(player2Name + "'s turn");
+            }
+            else{
+                statusLabel.setText(player1Name + "'s turn");
+            }
+            
             if(e.getSource() == button1)
             {
+                
                 if(!checked1){
-                    button1.setText(X);
+                    
+                 
                     checked1 = true;
                     
                     if(turn){
+                        button1.setIcon(puppyImage);
+                        pack();
                         button1Player1 = true;
                         player1Turn = false;
+                        JOptionPane.showMessageDialog(null, "Button pressed " + checked1);
                     } else {
+                        button1.setIcon(kittensImage);
+                        pack();
                         button1Player2 = true;
                         player1Turn = true; 
+                        JOptionPane.showMessageDialog(null, "Button pressed " + checked1);
+                        
                     }
+                    
                     pressed();
                 }
             }
             else if(e.getSource() == button2)
             {
                 if(!checked2){
+                    
                     button2.setText(X);
                     checked2 = true;
                     
@@ -520,23 +501,27 @@ public class TicTacToe extends JFrame {
                     } else {
                         button2Player2 = true;
                         player1Turn = true; 
+                        
                     }
+                    JOptionPane.showMessageDialog(null, "Button pressed " + checked2);
                     pressed();
                 }
             }
             else if(e.getSource() == button3)
             {
+                
                 if(!checked3){
                     button3.setText(X);
                     checked3 = true;
-
+                     
                     if(turn){
                         button3Player1 = true;
                         player1Turn = false;
                     } else {
-                        button3Player1 = true;
+                        button3Player2 = true;
                         player1Turn = true; 
                     }
+                    JOptionPane.showMessageDialog(null, "Button pressed " + checked3);
                     pressed();
                 }
             }
@@ -550,7 +535,7 @@ public class TicTacToe extends JFrame {
                         button4Player1 = true;
                         player1Turn = false;
                     } else {
-                        button4Player1 = true;
+                        button4Player2 = true;
                         player1Turn = true; 
                     }
                     pressed();
@@ -566,7 +551,7 @@ public class TicTacToe extends JFrame {
                         button5Player1 = true;
                         player1Turn = false;
                     } else {
-                        button5Player1 = true;
+                        button5Player2 = true;
                         player1Turn = true; 
                     }
                     pressed();
@@ -582,7 +567,7 @@ public class TicTacToe extends JFrame {
                         button6Player1 = true;
                         player1Turn = false;
                     } else {
-                        button6Player1 = true;
+                        button6Player2 = true;
                         player1Turn = true; 
                     }
                     pressed();
@@ -599,7 +584,7 @@ public class TicTacToe extends JFrame {
                         button7Player1 = true;
                         player1Turn = false;
                     } else {
-                        button7Player1 = true;
+                        button7Player2 = true;
                         player1Turn = true; 
                     }
                     pressed();
@@ -616,7 +601,7 @@ public class TicTacToe extends JFrame {
                         button8Player1 = true;
                         player1Turn = false;
                     } else {
-                        button8Player1 = true;
+                        button8Player2 = true;
                         player1Turn = true; 
                     }
                     pressed();
@@ -632,7 +617,7 @@ public class TicTacToe extends JFrame {
                         button9Player1 = true;
                         player1Turn = false;
                     } else {
-                        button9Player1 = true;
+                        button9Player2 = true;
                         player1Turn = true; 
                     }
                     pressed();
