@@ -1,6 +1,11 @@
-/*
- @author Finnian Allen & Graham Laird
-*/
+/**
+  *@file: TicTacToe.java
+  *		Program creates a game of TicTacToe
+  *		made for 2 users, implemented with GUIs
+  *
+  *@due: 02/22/19, extended to 02/24/19
+  *@authors Graham Laird & Finnian Allen
+  */
 
 
 package tictactoe;
@@ -11,104 +16,132 @@ import javax.swing.*;
 
 public class TicTacToe extends JFrame {
 
-   private JButton button1;    // Button 1
-   private JButton button2;    // Button 2
-   private JButton button3;    // Button 3
-   private JButton button4;    // Button 4
-   private JButton button5;    // Button 5
-   private JButton button6;    // Button 6
-   private JButton button7;    // Button 7
-   private JButton button8;    // Button 8
-   private JButton button9;    // Button 9
-   private JButton newGameButton;
-   private JButton resetButton;
-   private JButton exitButton;
-   private JTextField player1;    // player 1 name
-   private JTextField player2;    // player 1 name
-   private JPanel panel;       // A panel to hold button components
-   private JPanel playerPanel; // panel to hold player info
-   private JPanel player1Panel; // panel to hold player info
-   private JPanel player2Panel; // panel to hold player 2 info
-   private JPanel bottomPanel;
-   private JPanel buttonPanel;
-   
-   private JLabel statusLabel;
-   private JLabel player1Losses;
-   private JLabel player1Wins;
-   private int player1WinCount = 0;
-   private int player1LossCount = 0;
-   
+	/**
+	 *initialize all variables used throughout the GUI
+	 */
+	
+	private JButton button1;    // Top left button
+	private JButton button2;    // Top center button
+	private JButton button3;    // Top right button
+	private JButton button4;    // Middle left button
+	private JButton button5;    // Middle center button
+	private JButton button6;    // Middle right button
+	private JButton button7;    // Bottom left button
+	private JButton button8;    // Bottom center button
+	private JButton button9;    // Bottom right button
+	private JButton newGameButton; // button to start new game
+	private JButton resetButton; //button to reset game
+	private JButton exitButton; //button to exit program
+	private JTextField player1;    // player 1 name field
+	private JTextField player2;    // player 1 name field
+	private JPanel panel;       // A panel to hold 9 TicTactoe button components
+	private JPanel playerPanel; // panel to hold all player info
+	private JPanel player1Panel; // panel to hold player1 info
+	private JPanel player2Panel; // panel to hold player 2 info
+	private JPanel bottomPanel; // panel to hold bottom buttons and status bar
+	private JPanel buttonPanel; // panel to hold bottom buttons
+	
+	private JLabel statusLabel;	//status bar
+	private JLabel player1Losses; //player1 losser
+	private JLabel player1Wins; //player1 wins
+	private int player1WinCount = 0; //# of player1 wins
+	private int player1LossCount = 0; //#of player2 wins
 
-   private JLabel winsLabel1;
-   private JLabel lossesLabel1;
-   private JLabel winsLabel2;
-   private JLabel lossesLabel2;
-   private JLabel player2Losses;
-   private JLabel player2Wins;
-   private int player2WinCount = 0;
-   private int player2LossCount = 0;
+	private JLabel winsLabel1; // Wins label
+	private JLabel lossesLabel1; // Losses label
+	private JLabel winsLabel2; // Wins label
+	private JLabel lossesLabel2; // Losses label
+	private JLabel player2Losses; // player2 losses
+	private JLabel player2Wins; //player2 wins
+	private int player2WinCount = 0; //#of player2 wins
+	private int player2LossCount = 0; //#of player1 wins
+	
+	private JLabel name; //player1 name
+	private JLabel name2; //player2 name
+	private final int WINDOW_WIDTH = 500; // Window width
+	private final int WINDOW_HEIGHT = 500; // Window height
+	private String player1Name; // player 1's name
+	private String player2Name; // player 2's name
+	
+	//bools to keep track if each botton has been checkIfGameOver
+	private Boolean checked1 = false;
+	private Boolean checked2 = false;
+	private Boolean checked3 = false;
+	private Boolean checked4 = false;
+	private Boolean checked5 = false;
+	private Boolean checked6 = false;
+	private Boolean checked7 = false;
+	private Boolean checked8 = false;
+	private Boolean checked9 = false;
+	
+	//bools to keep track of WHO checkIfGameOver each button 
+	private Boolean button1Player1 = false;
+	private Boolean button2Player1 = false;
+	private Boolean button3Player1 = false;
+	private Boolean button4Player1 = false;
+	private Boolean button5Player1 = false;
+	private Boolean button6Player1 = false;
+	private Boolean button7Player1 = false;
+	private Boolean button8Player1 = false;
+	private Boolean button9Player1 = false;
+	private Boolean button1Player2 = false;
+	private Boolean button2Player2 = false;
+	private Boolean button3Player2 = false;
+	private Boolean button4Player2 = false;
+	private Boolean button5Player2 = false;
+	private Boolean button6Player2 = false;
+	private Boolean button7Player2 = false;
+	private Boolean button8Player2 = false;
+	private Boolean button9Player2 = false;
+	
+	//bool to keep track of in-game status
+	private Boolean inGame = false;
+	
+	//bool to keep track of whos turn it is
+	private Boolean player1Turn = true; 
    
-   private JLabel name;
-   private JLabel name2;
-   private final int WINDOW_WIDTH = 500; // Window width
-   private final int WINDOW_HEIGHT = 500; // Window height
-   private String player1Name; // player 1's name
-   private String player2Name; // player 2's name
-   private Boolean checked1 = false;
-   private Boolean checked2 = false;
-   private Boolean checked3 = false;
-   private Boolean checked4 = false;
-   private Boolean checked5 = false;
-   private Boolean checked6 = false;
-   private Boolean checked7 = false;
-   private Boolean checked8 = false;
-   private Boolean checked9 = false;
-   
-   private Boolean button1Player1 = false;
-   private Boolean button2Player1 = false;
-   private Boolean button3Player1 = false;
-   private Boolean button4Player1 = false;
-   private Boolean button5Player1 = false;
-   private Boolean button6Player1 = false;
-   private Boolean button7Player1 = false;
-   private Boolean button8Player1 = false;
-   private Boolean button9Player1 = false;
-   private Boolean button1Player2 = false;
-   private Boolean button2Player2 = false;
-   private Boolean button3Player2 = false;
-   private Boolean button4Player2 = false;
-   private Boolean button5Player2 = false;
-   private Boolean button6Player2 = false;
-   private Boolean button7Player2 = false;
-   private Boolean button8Player2 = false;
-   private Boolean button9Player2 = false;
-   
-   private Boolean inGame = false;
-   
-   
-   private Boolean player1Turn = true; // this is used to determine whose turn it is based on button pushes
-   
-   public TicTacToe()
-   {
+	public TicTacToe()
+	{
 		// Set the title bar text.
 		setTitle("Tic-Tac-Toe");
 
-		// Set the fonr
-		//( ! ) NOT WORKING
-		setFont(new Font("seriph", Font.BOLD, 24));
-		//( ! ) NOT WORKING
-
-      
 		// Set the size of the window.
 		setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 
 		// Specify what happens when the close button is clicked.
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		//initialize the player infos
+		initializePlayerInfo();
+		
+		//build the middle panel to hold the TicTacToe buttons
+		buildMiddlePanel();
+		
+		//build the panel to hold player info
+		buildPlayerPanel();
+		
+		//build bottom panel to hold 3 status buttons and status bar
+		buildBottomPanel();
       
-		// Create the three buttons.
-		player1 = new JTextField("Player 1", 8);
+		// Add the info to the window
+		add(panel, BorderLayout.CENTER);
+		add(playerPanel, BorderLayout.NORTH); // adds the two player panels
+		add(bottomPanel, BorderLayout.SOUTH);
+			  
+		// Display the window.
+		setVisible(true);   
+	}	
+	
+	
+	/**
+      The initializePlayerInfo method initializes all of the player info to the initial states
+   */
+	private void initializePlayerInfo()
+	{
+		//initialize player info labels
+		player1 = new JTextField("Player 1", 8); 
 		player2 = new JTextField("Player 2", 8);
-		winsLabel1 = new JLabel("Wins:");
+		winsLabel1 = new JLabel("Wins:"); 
 		lossesLabel1 = new JLabel("Losses:");
 		winsLabel2 = new JLabel("Wins:");
 		lossesLabel2 = new JLabel("Losses:");
@@ -119,26 +152,16 @@ public class TicTacToe extends JFrame {
 		name = new JLabel("Name: ");
 		name2 = new JLabel("Name: ");
 		statusLabel = new JLabel("Welcome to Tic-Tac-Toe!");
-      
-      
-		buildButtons();
-		buildMiddlePanel();
-		buildPlayerPanel();
-		buildBottomPanel();
-      
-      
-		// Add the info to the window
-		add(panel, BorderLayout.CENTER);
-		add(playerPanel, BorderLayout.NORTH); // adds the two player panels
-		add(bottomPanel, BorderLayout.SOUTH);
-		  
-		  
-		// Display the window.
-		setVisible(true);   
-	}	
-   
+	}
+	
+	/**
+		The buildMiddlePanel method builds the TicTacToe button panel.
+	*/
 	private void buildMiddlePanel()
 	{
+		//build the 9 TicTacToe buttons
+		buildButtons();
+		
 		panel = new JPanel();
 		panel.setLayout(new GridLayout(3, 3));
 		panel.add(button1);
@@ -152,6 +175,9 @@ public class TicTacToe extends JFrame {
 		panel.add(button9);     
 	}
    
+	/**
+		The buildButtons method builds 9 TicTacToe buttons 
+	*/
 	private void buildButtons()
 	{
 		button1 = new JButton();
@@ -176,6 +202,9 @@ public class TicTacToe extends JFrame {
 	}
    
    
+	/**
+		The buildBottomPanel method builds the bottom button panel.
+	*/
 	private void buildBottomPanel()
 	{
 		bottomPanel = new JPanel();
@@ -187,6 +216,9 @@ public class TicTacToe extends JFrame {
 		bottomPanel.add(statusLabel, BorderLayout.SOUTH); 	
 	}
    
+	/**
+		The buildBottomPanel method builds the panel with the 3 buttons on the bottom.
+	*/
 	private void buildButtonPanel(){
 		buttonPanel = new JPanel();
        
@@ -202,6 +234,9 @@ public class TicTacToe extends JFrame {
 		buttonPanel.add(exitButton);
 	}
    
+	/**
+		The resetGame method resets the game state to as if the program has just been opened
+	*/
 	private void resetGame()
 	{
 		resetBoard();
@@ -224,7 +259,10 @@ public class TicTacToe extends JFrame {
 		inGame = false;
 	}
    
-   private void resetBoard()
+	/**
+		The resetBoard method resets the board after a single game has been won/stalemated
+	*/
+	private void resetBoard()
 	{
 		button1.setIcon(null);
 		button2.setIcon(null);
@@ -268,6 +306,9 @@ public class TicTacToe extends JFrame {
 		player1Turn = true;
 	}
    
+	/**
+		The buildPlayerPanel method puts together the player info panel
+	*/
 	private void buildPlayerPanel()
 	{
 		playerPanel = new JPanel();
@@ -278,6 +319,9 @@ public class TicTacToe extends JFrame {
       
 	}
    
+	/**
+		The buildPlayerOne method builds the player1 info panel
+	*/
 	private void buildPlayerOne()
 	{
 		player1Panel = new JPanel();
@@ -291,6 +335,9 @@ public class TicTacToe extends JFrame {
         player1Panel.add(player1Losses);    
 	}
    
+	/**
+		The buildPlayerTwo method builds the player2 info panel
+	*/
 	private void buildPlayerTwo()
 	{
 		player2Panel = new JPanel();
@@ -303,9 +350,12 @@ public class TicTacToe extends JFrame {
         player2Panel.add(lossesLabel2);
         player2Panel.add(player2Losses);  
    
-	}
+	}  
    
-   
+	/**
+      Private inner class that handles the event when
+      the user clicks a button in the program
+	*/
 	private class ButtonListener implements ActionListener
 	{
                 @Override
@@ -313,41 +363,55 @@ public class TicTacToe extends JFrame {
 		{
 			String actionCommand = e.getActionCommand();
 			switch (actionCommand) {
+				//If the user hits the "New Game" button
 				case "New Game":
+					//get the entered player names
 					player1Name = player1.getText();
 					player2Name = player2.getText();
-					if(player1Name.equals("") || player2Name.equals(""))
+					
+					
+					if(player1Name.equals("") || player2Name.equals("")) //if either of the names is empty, display an error
 					{
 						JOptionPane.showMessageDialog(null, "Both names must be entered to start the game!", "ERROR", JOptionPane.ERROR_MESSAGE);
 					}
-					else
+					else //else make the name fields non editable and set the game to start
 					{
 						player1.setEditable(false);
 						player2.setEditable(false);
 						inGame = true;
 						statusLabel.setText(player1Name + "'s turn");
 					}   break;
+				//if the user hits the "Reset" button
 				case "Reset":
+					//confirm that they want to reset the game
 					int confirm = JOptionPane.showConfirmDialog(null, "This will end the game and set the win/loss stats to 0. Are you sure?", "ARE YOU SURE?", JOptionPane.YES_NO_OPTION);
-					if(confirm == JOptionPane.YES_OPTION)
+					if(confirm == JOptionPane.YES_OPTION) //reset the game if they want to 
 					{
 						resetGame();
 					}   break;
+				//if the user hits the "Exit" button
 				case "Exit":
+					//exit the program
 					System.exit(0);
+				//else if the user hits one of the TicTacToe buttons
 				default:
-					if(player1Turn)
+					if(player1Turn) //if it's player 1s turn
 					{
+						//run through turn logic
 						turn(e, player1Turn);
 					}
-					else
+					else //else if it's player 2s turn
 					{
+						//run through turn logic
 						turn(e, player1Turn); 
 					}   break;
 			}
 		}
 	}
-   
+	
+	/**
+		winner method updates all necessary info when someone wins and resets the board
+	*/
 	private void winner(int player)
 	{
 		if(player == 1){
@@ -368,20 +432,23 @@ public class TicTacToe extends JFrame {
 		}
 	}
    
-	public void pressed()
+	/**
+		checkIfGameOver method goes through all possible scenarios where the game would end to see if the game ended on the last move
+	*/
+	public void checkIfGameOver()
 	{
 		if (checked1 && checked5 && checked9)
-		{ // diagnol from loc 1
-			if(button1Player1 && button5Player1 && button9Player1){
+		{ // diagonal from top left to bottom right
+			if(button1Player1 && button5Player1 && button9Player1){ //if player 1 got this
                 winner(1);
 			} 
-			else if (button1Player2 && button5Player2 && button9Player2)
+			else if (button1Player2 && button5Player2 && button9Player2) //else if player 2 got this
 			{
                 winner(2);
 			}     
 		}
 		if (checked3 && checked5 && checked7)
-		{ // diagnol from loc 3
+		{ // diagonal from top right to bottom left
 			if(button3Player1 && button5Player1 && button7Player1){
                 winner(1);
 			} 
@@ -391,7 +458,7 @@ public class TicTacToe extends JFrame {
 			}
 		}
 		if (checked1 && checked4 && checked7)
-		{ // vertical from loc 1
+		{ // vertical from tope left
 			if(button1Player1 && button4Player1 && button7Player1){
                 winner(1);
 			} 
@@ -401,7 +468,7 @@ public class TicTacToe extends JFrame {
 			}
 		}
 		if (checked2 && checked5 && checked8)
-		{ // vertical from loc 2
+		{ // vertical from top middle
             if(button2Player1 && button5Player1 && button8Player1){
                 winner(1);
 			} 
@@ -411,7 +478,7 @@ public class TicTacToe extends JFrame {
 			}
 		}
 		if (checked3 && checked6 && checked9)
-		{ // vertical from loc 3
+		{ // vertical from top right
 			if(button3Player1 && button6Player1 && button9Player1)
 			{
                 winner(1);
@@ -422,7 +489,7 @@ public class TicTacToe extends JFrame {
 			}
 		}
 		if(checked1 && checked2 && checked3) 
-		{ // horizontal from 1
+		{ // horizontal from top left
 			if(button1Player1 && button2Player1 && button3Player1)	
 			{
                 winner(1);      
@@ -433,7 +500,7 @@ public class TicTacToe extends JFrame {
 			}
 		}
 		if(checked4 && checked5 && checked6) 
-		{ // horizontal from 2
+		{ // horizontal from middle left
 			if(button4Player1 && button5Player1 && button6Player1)
 			{
                 winner(1);
@@ -444,7 +511,7 @@ public class TicTacToe extends JFrame {
 			}
 		}
 		if(checked7 && checked8 && checked9) 
-		{ // horizontal from 3
+		{ // horizontal from bottom left
 			if(button7Player1 && button8Player1 && button9Player1)
 			{
                 winner(1);
@@ -454,15 +521,20 @@ public class TicTacToe extends JFrame {
                 winner(2);
 			}
 		}
-		if(checked1 && checked2 && checked3 && checked4 && checked5 && checked6 && checked7 && checked8 && checked9){
+		if(checked1 && checked2 && checked3 && checked4 && checked5 && checked6 && checked7 && checked8 && checked9){ //else if all 9 buttons are presses and no one got 3 in a row
 			JOptionPane.showMessageDialog(null, "The game has ended in a stalemate!");
 			resetBoard();   
 		}
 	}
-   
+	
+	/**
+		turn method goes through the turn logic depending on which button you press
+	*/
 	public void turn(ActionEvent e, Boolean turn){
-		if(inGame){ 
-            ImageIcon puppyIcon = new ImageIcon("puppy.jpg");
+		if(inGame){ //if the game is in progress, allow turn logic to progress
+            
+			//initialize and scale puppy/kitten pictures to replaces Xs and Os
+			ImageIcon puppyIcon = new ImageIcon("puppy.jpg");
             ImageIcon kittensIcon = new ImageIcon("kitten.jpg");
             Image puppyImage = puppyIcon.getImage();
             Image kittensImage = kittensIcon.getImage();
@@ -472,29 +544,30 @@ public class TicTacToe extends JFrame {
             kittensIcon = new ImageIcon(scaledKittens);
             
             
-            if(e.getSource() == button1)
+            if(e.getSource() == button1) //if the top left button was pressed
             {  
-                if(!checked1){
-                    checked1 = true;
-                    if(turn)
+                if(!checked1){ //if it hasn't already been pressed
+                    checked1 = true; //set boolean to say that it has now been pressed
+                    if(turn) //if it's player 1s turn
 					{
-                        button1.setIcon(puppyIcon);
-                        button1Player1 = true;
-                        player1Turn = false;
-                        statusLabel.setText(player2Name + "'s turn");
+                        button1.setIcon(puppyIcon); //set the button to display the puppy image
+                        button1Player1 = true; //say that it was player 1 that pressed the button
+                        player1Turn = false; //say that it is no longer player 1s turn
+                        statusLabel.setText(player2Name + "'s turn"); //update status label to say whos turn it is 
                     } 
-					else 
+					else //else if it's player 2s turn
 					{
-                        button1.setIcon(kittensIcon);
-                        button1Player2 = true;
-                        player1Turn = true; 
-                        statusLabel.setText(player1Name + "'s turn");
+                        button1.setIcon(kittensIcon); //set the button to display the kitten image
+                        button1Player2 = true; //sau that it was player 2 that pressed the button
+                        player1Turn = true;  //say that it is no longer player 2s turn
+                        statusLabel.setText(player1Name + "'s turn"); //update status label to say whos turn it is
                         
                     }   
-                    pressed();
+					//after button logic, check if the game has been won/stalemated
+                    checkIfGameOver();
                 }
             }
-            else if(e.getSource() == button2)
+            else if(e.getSource() == button2) //same logic as above but if top middle button was pressed
             {
                 if(!checked2)
 				{
@@ -513,10 +586,10 @@ public class TicTacToe extends JFrame {
                         player1Turn = true; 
                         statusLabel.setText(player1Name + "'s turn");
                     }
-                    pressed();
+                    checkIfGameOver();
                 }
             }
-            else if(e.getSource() == button3)
+            else if(e.getSource() == button3) //same logic as above but if top right button was pressed
             {
                 if(!checked3){
                     checked3 = true;
@@ -534,10 +607,10 @@ public class TicTacToe extends JFrame {
                         player1Turn = true; 
                         statusLabel.setText(player1Name + "'s turn");
                     }
-                    pressed();
+                    checkIfGameOver();
                 }
             }
-            else if(e.getSource() == button4)
+            else if(e.getSource() == button4) //same logic as above but if middle left button was pressed
             {
                 if(!checked4)
 				{
@@ -556,10 +629,10 @@ public class TicTacToe extends JFrame {
                         player1Turn = true; 
                         statusLabel.setText(player1Name + "'s turn");
                     }
-                    pressed();
+                    checkIfGameOver();
                 }
             }
-            else if(e.getSource() == button5)
+            else if(e.getSource() == button5) //same logic as above but if middle center button was pressed
             {
                 if(!checked5)
 				{
@@ -578,10 +651,10 @@ public class TicTacToe extends JFrame {
                         player1Turn = true; 
                         statusLabel.setText(player1Name + "'s turn");
                     }
-                    pressed();
+                    checkIfGameOver();
                 }
             }
-            else if(e.getSource() == button6)
+            else if(e.getSource() == button6) //same logic as above but if middle right button was pressed
             {
                 if(!checked6)
 				{
@@ -600,10 +673,10 @@ public class TicTacToe extends JFrame {
                         player1Turn = true;
                         statusLabel.setText(player1Name + "'s turn");
                     }
-                    pressed();
+                    checkIfGameOver();
                 }
             }
-            else if(e.getSource() == button7)
+            else if(e.getSource() == button7) //same logic as above but if bottom left button was pressed
             {
                 if(!checked7)
 				{
@@ -622,10 +695,10 @@ public class TicTacToe extends JFrame {
                         player1Turn = true;
                         statusLabel.setText(player1Name + "'s turn");
                     }
-                    pressed();
+                    checkIfGameOver();
                 }
             }
-            else if(e.getSource() == button8)
+            else if(e.getSource() == button8) //same logic as above but if bottom middle button was pressed
             {
                 if(!checked8)
 				{
@@ -644,10 +717,10 @@ public class TicTacToe extends JFrame {
                         player1Turn = true;
                         statusLabel.setText(player1Name + "'s turn");
                     }
-                    pressed();
+                    checkIfGameOver();
                 }
             }
-            else if(e.getSource() == button9)
+            else if(e.getSource() == button9) //same logic as above but if bottom right button was pressed
             {
                 if(!checked9)
 				{
@@ -666,7 +739,7 @@ public class TicTacToe extends JFrame {
                         player1Turn = true; 
                         statusLabel.setText(player1Name + "'s turn");
                     }
-                    pressed();
+                    checkIfGameOver();
                 }
             }
         }
@@ -674,7 +747,7 @@ public class TicTacToe extends JFrame {
     
 	public static void main(String[] args) 
 	{
-        new TicTacToe();
+        new TicTacToe(); //create the gui
     }
     
 }
